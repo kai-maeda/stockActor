@@ -1,18 +1,16 @@
 import java.util.Scanner;
-
 import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
-
 import javax.swing.SwingUtilities;
-
 import oracle.jdbc.pool.OracleDataSource;
 import oracle.jdbc.OracleConnection;
 import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
+
 
 public class Login {
 
@@ -56,17 +54,9 @@ public class Login {
         }
     }
 
-    private static void authenticateUser(Scanner scanner, OracleConnection connection, int option) {
-        if(option == 1){
+    private static boolean authenticateUser(OracleConnection connection, String option) {
+        if(option == "customer"){
             try {
-                System.out.print("Enter your username: ");
-                String username = scanner.nextLine();
-                // System.out.println("Username: " + username);
-    
-                System.out.print("Enter your password: ");
-                String password = scanner.nextLine();
-                // System.out.println("Password: " + password);
-
                 String selectQuery = "SELECT * FROM Customer WHERE username = " + "'" + username + "'" + " AND password = " + "'" + password + "'";
     
                 try (Statement statement = connection.createStatement()) {
@@ -80,24 +70,20 @@ public class Login {
                         System.out.println("Authentication successful!");
                         System.out.println("Welcome, " + resultSet.getString("cname") + "!");
                         TraderInterface.main2(connection, resultSet.getString("username"));
+                        return True
                     } else {
                         System.out.println("Authentication failed. Please check your username and password.");
+                        return False
                     }
                 }
             } catch (SQLException e) {
                 System.out.println("ERROR: Authentication failed.");
                 e.printStackTrace();
+                return False
             }
         }
         else{
             try {
-                System.out.print("Enter your username: ");
-                String username = scanner.nextLine();
-                // System.out.println("Username: " + username);
-    
-                System.out.print("Enter your password: ");
-                String password = scanner.nextLine();
-                // System.out.println("Password: " + password);
 
                 String selectQuery = "SELECT * FROM Manager WHERE username = " + "'" + username + "'" + " AND password = " + "'" + password + "'";
     
@@ -110,13 +96,16 @@ public class Login {
                         System.out.println("Authentication successful!");
                         System.out.println("Welcome, " + resultSet.getString("cname") + "!");
                         ManagerInterface.parentFunction(connection, resultSet.getString("username").trim());
+                        return True
                     } else {
                         System.out.println("Authentication failed. Please check your username and password.");
+                        return False
                     }
                 }
             } catch (SQLException e) {
                 System.out.println("ERROR: Authentication failed.");
                 e.printStackTrace();
+                return False
             }
         }
     }
@@ -264,5 +253,4 @@ public class Login {
         return 1;
     }
 }
-
 

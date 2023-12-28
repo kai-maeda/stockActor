@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="css/startupOptions.css">
+</head>
+<body>
+
+    <div class="login-container">
+        <h2>Are you a</h2>
+        <form action="#" method="post">
+            <button id="managerButton" type="button" onclick="redirectToLogin('manager')">Manager</button>
+            <button id="customerButton" type="button" onclick="redirectToLogin('customer')">Customer</button>
+        </form>
+    </div>
+
+    <script>
+        function redirectToLogin(userType) {
+            var loginUrl = 'login.html?type=' + userType;
+            window.location.replace(loginUrl);
+        }
+    </script>
+
+</body>
+</html>

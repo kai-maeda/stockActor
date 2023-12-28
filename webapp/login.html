@@ -1,0 +1,73 @@
+<!-- login.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="css/login.css">
+</head>
+<body>
+    <script>
+        async function establishOracleConnection() {
+            // Make an HTTP request to the server to establish Oracle connection
+            const response = await fetch('/establishOracleConnection');
+            const connection = await response.json();
+            return connection;
+        }
+        establishOracleConnection().then(connection => {
+            sessionStorage.setItem('oracleConnection', JSON.stringify(connection));
+        });
+        function getQueryParam(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+        function authenticateUser() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            // Make an HTTP request to the server
+            fetch('/authenticateUser', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    username: username,
+                    password: password,
+                }),
+            })
+            .then(response => response.text())
+            .then(data => {
+                console.log('Server response:', data);
+                // Handle the response as needed
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
+        const userType = getQueryParam('type');
+
+        if (userType === 'customer') {
+            console.log('Customer login page');
+        } else if (userType === 'manager') {
+            console.log('Manager login page');
+        } else {
+            console.log('Default login page');
+        }
+    </script>
+    <div class="login-container">
+        <h2>Customer Login</h2>
+        <form action="#" method="post">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+            <div class = "button-container">
+                <button type="button" onclick = "authenticateUser()" >Login</button>
+                <button type="submit">Sign up</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
