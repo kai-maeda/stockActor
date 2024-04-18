@@ -44,7 +44,7 @@ app.post('/validate-symbol', async (req, res) => {
     const { symbol } = req.body;
     try {
         let symbolExists = false;
-        const [rows] = await db.query('SELECT * FROM stock_actor WHERE symbol = ?', [symbol]);
+        const [rows] = await db.query('SELECT * FROM Stock_Actor WHERE symbol = ?', [symbol]);
         if(rows.length > 0) {
             symbolExists = true;
         }
@@ -75,7 +75,7 @@ app.post('/trade', async (req, res) => {
     try {
         // console.log("in /trade");
         const accountDetails = (await db.query('SELECT * FROM stock_account WHERE symbol = ? AND username = ? AND acc_id = ?', [symbol, username, acc_id]))[0];
-        const stockDetails = (await db.query('SELECT * FROM stock_actor WHERE symbol = ?', [symbol]))[0];
+        const stockDetails = (await db.query('SELECT * FROM Stock_Actor WHERE symbol = ?', [symbol]))[0];
         console.log(stockDetails[0]);
         if(typeof stockDetails[0] == 'undefined') {
             return res.json({ error: 'A stock with this symbol does not exist.' });
@@ -100,7 +100,7 @@ app.all('/trade-update', async (req,res) => {
     let [rows4] = [];
     try {
         accountDetails = (await db.query('SELECT * FROM stock_account WHERE symbol = ? AND username = ? AND acc_id = ?', [symbol, username, acc_id]))[0][0];
-        stockDetails = (await db.query('SELECT * FROM stock_actor WHERE symbol = ?', [symbol]))[0][0];
+        stockDetails = (await db.query('SELECT * FROM Stock_Actor WHERE symbol = ?', [symbol]))[0][0];
         const totalValue = stockDetails.current_price * quantity;
         
         if (action === 'buy') { //add to bought_stock
@@ -116,7 +116,7 @@ app.all('/trade-update', async (req,res) => {
                 console.log(rows4);
                 for (let i = 0; i < rows4.length; i++) {
                     const stock = rows4[i];
-                    const [actorDetails] = await db.query('SELECT * FROM stock_actor WHERE symbol = ?', [stock.symbol]);
+                    const [actorDetails] = await db.query('SELECT * FROM Stock_Actor WHERE symbol = ?', [stock.symbol]);
                     // const [cost] = (await db.query(query5, [acc_id,stock.symbol]));
                     Object.assign(stock, actorDetails[0]);
                     // Object.assign(stock, cost[0]);
@@ -129,7 +129,7 @@ app.all('/trade-update', async (req,res) => {
                 console.log(rows4);
                 for (let i = 0; i < rows4.length; i++) {
                     const stock = rows4[i];
-                    const [actorDetails] = await db.query('SELECT * FROM stock_actor WHERE symbol = ?', [stock.symbol]);
+                    const [actorDetails] = await db.query('SELECT * FROM Stock_Actor WHERE symbol = ?', [stock.symbol]);
                     // const [cost] = (await db.query(query5, [acc_id,stock.symbol]));
                     Object.assign(stock, actorDetails[0]);
                     // Object.assign(stock, cost[0]);
@@ -151,7 +151,7 @@ app.all('/trade-update', async (req,res) => {
             console.log(rows4);
             for (let i = 0; i < rows4.length; i++) {
                 const stock = rows4[i];
-                const [actorDetails] = await db.query('SELECT * FROM stock_actor WHERE symbol = ?', [stock.symbol]);
+                const [actorDetails] = await db.query('SELECT * FROM Stock_Actor WHERE symbol = ?', [stock.symbol]);
                 // const [cost] = (await db.query(query5, [acc_id,stock.symbol]));
                 Object.assign(stock, actorDetails[0]);
                 // Object.assign(stock, cost[0]);

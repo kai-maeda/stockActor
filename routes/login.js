@@ -85,7 +85,7 @@ module.exports = function(db) {
             const[rows4] = await db.query(query4, [username,acc_id]); //stock_account might be empty
             for (let i = 0; i < rows4.length; i++) {
                 const stock = rows4[i];
-                const [actorDetails] = await db.query('SELECT * FROM stock_actor WHERE symbol = ?', [stock.symbol]);
+                const [actorDetails] = await db.query('SELECT * FROM Stock_Actor WHERE symbol = ?', [stock.symbol]);
                 // const [cost] = (await db.query(query5, [acc_id,stock.symbol]));
                 Object.assign(stock, actorDetails[0]);
                 // Object.assign(stock, cost[0]);

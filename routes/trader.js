@@ -164,7 +164,7 @@ module.exports = function(db,createTransaction,getDateSQLFriendly) {
             movieInfo = JSON.parse(movieInfo);
         } catch (error) {}
         try {
-            const [stockInfo] = await db.query('SELECT * FROM stock_actor WHERE symbol = ?', [symbol]);
+            const [stockInfo] = await db.query('SELECT * FROM Stock_Actor WHERE symbol = ?', [symbol]);
             if (stockInfo.length > 0) {
                 console.log(stockInfo);
                 console.log(movieInfo);

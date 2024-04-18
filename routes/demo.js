@@ -43,7 +43,7 @@ module.exports = function(db) {
         let curr_date  = req.query.curr_date;
         curr_date = new Date(curr_date);
         try {
-            const [rows] = await db.query('SELECT * FROM stock_actor WHERE symbol = ?', [symbol]);
+            const [rows] = await db.query('SELECT * FROM Stock_Actor WHERE symbol = ?', [symbol]);
             if(rows.length > 0) {
                 let { actor_name, closing_price, date_of_birth, current_price, symbol } = rows[0];
                 current_price = parseFloat(current_price).toFixed(2);
