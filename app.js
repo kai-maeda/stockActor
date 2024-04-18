@@ -63,7 +63,7 @@ app.post('/change-date', async (req, res) => {
         return res.status(400).json({ error: "New date is required." });
     }
     try {
-        await db.query('UPDATE curr_time SET curr_date = ?', [newDate]);
+        await db.query('UPDATE Curr_Time SET curr_date = ?', [newDate]);
         res.sendStatus(200);
         res.json({ success: true, message: "Date updated successfully." });
     } catch (error) {}

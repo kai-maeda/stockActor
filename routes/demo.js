@@ -4,9 +4,9 @@ module.exports = function(db) {
 
     router.all('/open-market', async (req, res) => {
         try {
-            const [rows] = await db.query(`SELECT is_open FROM curr_time LIMIT 1`);    
+            const [rows] = await db.query(`SELECT is_open FROM Curr_Time LIMIT 1`);    
             if (rows.length === 0) {return res.status(404).send('Market status not found.');}
-            await db.query(`UPDATE curr_time SET is_open = TRUE`);  
+            await db.query(`UPDATE Curr_Time SET is_open = TRUE`);  
             res.redirect('/Demo');  
         } catch (error) {
             console.error(error);
@@ -15,9 +15,9 @@ module.exports = function(db) {
     });
     router.all('/close-market', async (req, res) => {
         try {
-            const [rows] = await db.query(`SELECT is_open FROM curr_time LIMIT 1`);    
+            const [rows] = await db.query(`SELECT is_open FROM Curr_Time LIMIT 1`);    
             if (rows.length === 0) {return res.status(404).send('Market status not found.');}
-            await db.query(`UPDATE curr_time SET is_open = FALSE`);   
+            await db.query(`UPDATE Curr_Time SET is_open = FALSE`);   
             res.redirect('/Demo'); 
         } catch (error) {
             console.error(error);
@@ -27,7 +27,7 @@ module.exports = function(db) {
     router.all('/next-day', async(req, res) => {
         try {
             await db.query(`
-                UPDATE curr_time 
+                UPDATE Curr_Time 
                 SET curr_date = DATE_ADD(curr_date, INTERVAL 1 DAY)
             `);
             res.redirect('/Demo');
