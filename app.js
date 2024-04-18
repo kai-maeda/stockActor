@@ -17,10 +17,10 @@ app.get('/', (req, res) => {
 
 // MySQL connection
 const db = mysql.createConnection({
-    host: 'localhost',
-    user: 'root', // Your MySQL username
-    password: 'UCSB@Sp191919khm', // Your MySQL password
-    database: 'trade'
+    host: process.env.MYSQL_ADDON_HOST,       // Environment variable for the DB host
+    user: process.env.MYSQL_ADDON_USER,       // Environment variable for the DB user
+    password: process.env.MYSQL_ADDON_PASSWORD, // Environment variable for the DB password
+    database: process.env.MYSQL_ADDON_DB     // Environment variable for the DB name
 }).promise();
 
 const indexRouter = require('./routes/index')(db);
