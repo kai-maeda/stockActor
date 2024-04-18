@@ -13,7 +13,7 @@ module.exports = function(db) {
         let curr_date;
         let is_open;
         try {
-            const [rows] = await db.query(`SELECT * FROM curr_time`);
+            const [rows] = await db.query(`SELECT * FROM Curr_Time`);
             if (rows[0].count > 1) {
                 return res.status(400).send('There should not be more than one curr_date');
             }
