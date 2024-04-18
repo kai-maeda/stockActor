@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actor Trading</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #E1F0F2; /* Light teal background */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            text-align: center;
+            background-color: #FFFFFF; /* White background for the container */
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #1B4F5C; /* Dark blue color for the header */
+        }
+
+        .button {
+            display: block;
+            width: 200px;
+            margin: 20px auto;
+            padding: 10px;
+            font-size: 16px;
+            color: #FFFFFF; /* White text on buttons */
+            background-color: #5CA4A9; /* Teal color for buttons */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .button:hover {
+            background-color: #F4B860; /* Orange color for button hover */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to the Startup Options</h1>
+        <form action="/customer-interface" method="post">
+            <button type="submit" class="button">Customer Interface</button>
+        </form>
+        <!-- Commented out Manager Interface for now -->
+        <!--
+        <form action="/manager-interface" method="post">
+            <button type="submit" class="button">Manager Interface</button>
+        </form>
+        -->
+
+        <form action="/demo" method="post">
+            <button type="submit" class="button">Demo</button>
+        </form>
+    </div>
+</body>
+</html>

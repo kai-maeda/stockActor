@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #E1F0F2; /* Light teal background */
+            margin: 0;
+            padding: 0;
+            position: relative;
+        }
+
+        .navbar {
+            background-color: #5CA4A9; /* Teal background */
+            color: #ffffff;
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        .navbar ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar li {
+            display: inline-block;
+            margin-right: 20px;
+        }
+
+        .navbar a {
+            color: #ffffff;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .navbar a:hover {
+            background-color: #F4B860; /* Orange hover */
+        }
+
+        .container {
+            text-align: center;
+            background-color: #FFFFFF; /* White background */
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+
+        h1 {
+            color: #1B4F5C; /* Dark teal text */
+            margin-bottom: 20px;
+        }
+
+        .sub-box {
+            display: inline-block;
+            width: auto;
+            padding: 20px;
+            margin: 10px;
+            background-color: #B8E1DD; /* Light teal background */
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s;
+            min-width: 300px; /* Set a minimum width to ensure usability */
+            max-width: 100%; /* Optional: Set a maximum width to control layout on larger screens */
+            overflow-x: auto;
+        }
+
+        .google-back-button {
+            border: solid white; /* Teal border */
+            border-width: 0 3px 3px 0;
+            display: inline-block;
+            padding: 3px;
+            background: #5CA4A9; /* White background */
+            transform: rotate(135deg);
+            -webkit-transform: rotate(135deg);
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            cursor: pointer;
+        }
+
+        .sub-box:hover {
+            background-color: #D1E7E9; /* Lighter teal on hover */
+        }
+
+        .green, .red, .grey {
+            font-weight: bold; /* Making the text bold for better readability */
+        }
+
+        .green {
+            color: #4CAF50; /* Green color for positive values */
+        }
+
+        .red {
+            color: #F44336; /* Red color for negative values */
+        }
+
+        .grey {
+            color: #607D8B; /* Grey color for neutral values */
+        }
+        .research-container {
+            display: flex;
+            flex-direction: column; /* Stack groups vertically */
+            align-items: center; /* Center groups horizontally */
+        }
+        .trade-container {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap; /* Wrap items if they don't fit in one line */
+        }
+        .stock-movie-group {
+            display: flex;
+            justify-content: space-around; /* Space out columns within each group */
+            width: 100%; /* Take the full width of the parent container */
+            margin-bottom: 20px; /* Add some space between the stock and movie groups */
+        }
+
+        .transaction-history-container, .movie-info-container, .column {
+            background-color: #FFFFFF; /* White background for all containers */
+            border: 1px solid #D1E7E9; /* Light teal border */
+            border-radius: 5px; /* Rounded corners */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* Subtle shadow for depth */
+            padding: 10px;
+            margin: 10px;
+        }
+        .stocks-movies-column {
+            flex: 1; /* Takes 1 portion of the available space */
+        }
+
+        /* Individual columns for stock info and movie info */
+        .info-column {
+            flex: 2; /* Takes 3 portions of the available space */
+            padding: 20px; /* Optional: Increased padding for larger info columns */
+        }
+        @media (max-width: 768px) {
+            .stock-movie-group {
+                flex-direction: column; /* Stack columns vertically on narrower screens */
+            }
+
+            .stocks-movies-column, .info-column {
+                flex-basis: 100%; /* Each column takes the full width of the group */
+            }
+        }
+
+        .stock-form button, .movie-form button {
+            background-color: white; /* Teal background for buttons */
+        
+            color: #5CA4A9; /* White text */
+            padding: 0;
+            font: inherit;
+            cursor: pointer;
+            outline: inherit;
+            border: none;
+            transition: background-color 0.3s;
+        }
+
+        .stock-form button:hover, .movie-form button:hover {
+            text-decoration: underline;
+            color: #F4B860; 
+        }
+
+    </style>
+</head>
+<body>
+    <form action="/" method="get" id="backForm"></form>
+    <button type="submit" form="backForm" class="google-back-button"></button>
+    <div class="navbar">
+        <ul>
+            <li><a href="/trader?menu=dashboard&username=<%= username %>&acc_id=<%= acc_id %>&balance=<%= balance %>&stockData=<%= JSON.stringify(stockData) %>&position=<%= position %>">DashBoard</a></li>
+            <li><a href="/trader?menu=trade&username=<%= username %>&acc_id=<%= acc_id %>&balance=<%= balance %>&stockData=<%= JSON.stringify(stockData) %>&position=<%= position %>">Trade</a></li>
+            <li><a href="/trader?menu=research&username=<%= username %>&acc_id=<%= acc_id %>&balance=<%= balance %>&stockData=<%= JSON.stringify(stockData) %>&position=<%= position %>">Research</a></li>
+            <li><a href="/trader?menu=transfer&username=<%= username %>&acc_id=<%= acc_id %>&balance=<%= balance %>&stockData=<%= JSON.stringify(stockData) %>&position=<%= position %>">Transfer</a></li>
+        </ul>
+    </div>
+    <% if (menu === 'dashboard') { %>
+    <div class="container">
+        <h1>Dashboard</h1>
+        <div class="sub-box">
+            <h2>Overview</h2>
+            <p><%= username %> -  <%= acc_id %></p>
+            <p><strong>Account Value:</strong> $<%= Number(balance).toFixed(2) %></p>
+            <p><strong>Position:</strong> $<%= Number(position).toFixed(2) %></p>
+            <p><strong>Cash:</strong> $<%= (balance - position).toFixed(2) %></p>
+        </div>
+        <div class="sub-box">
+            <h2>Portfolio</h2>
+            <% if (stockData.length > 0) { %>
+                <table border="1">
+                    <thead>
+                        <tr>
+                            <th>Symbol</th>
+                            <th>Price</th>
+                            <th>Day Gain $</th>
+                            <th>Day Gain %</th>
+                            <th>Market Value</th>
+                            <th>Cost</th>
+                            <th>Total Gain $</th>
+                            <th>Total Gain %</th>
+                            <th>Quantity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% stockData.forEach(function(stock) { 
+                            var dayGainDollarClass = stock.current_price - stock.closing_price > 0 ? 'green' : stock.current_price - stock.closing_price < 0 ? 'red' : 'grey';
+                            var dayGainPercentClass = ((stock.current_price - stock.closing_price) / stock.closing_price * 100) > 0 ? 'green' : ((stock.current_price - stock.closing_price) / stock.closing_price * 100) < 0 ? 'red' : 'grey';
+                            var totalGainDollarClass = (stock.num_share * stock.current_price - stock.balance_share) > 0 ? 'green' : (stock.num_share * stock.current_price - stock.balance_share) < 0 ? 'red' : 'grey';
+                            var totalGainPercentClass = ((stock.num_share * stock.current_price - stock.balance_share) / stock.balance_share * 100) > 0 ? 'green' : ((stock.num_share * stock.current_price - stock.balance_share) / stock.balance_share * 100) < 0 ? 'red' : 'grey';
+                        %>
+                        <tr>
+                            <td><%= stock.symbol %></td>
+                            <td><%= stock.current_price %></td>
+                            <td class="<%= dayGainDollarClass %>"><%= stock.current_price - stock.closing_price %></td>
+                            <td class="<%= dayGainPercentClass %>"><%= ((stock.current_price - stock.closing_price) / stock.closing_price * 100).toFixed(2) %>%</td>
+                            <td>$<%= stock.num_share * stock.current_price.toFixed(2) %></td>
+                            <td>$<%= stock.balance_share.toFixed(2) %></td>
+                            <td class="<%= totalGainDollarClass %>"><%= (stock.num_share * stock.current_price - stock.balance_share).toFixed(2) %></td>
+                            <td class="<%= totalGainPercentClass %>"><%= ((stock.num_share * stock.current_price - stock.balance_share) / stock.balance_share * 100).toFixed(2) %>%</td>
+                            <td><%= stock.num_share %></td>
+                        </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            <% } else { %>
+                <p class="info-placeholder">You have no stocks</p>
+            <% } %>
+        </div>
+        <div class="sub-box">
+            <h1>Transaction History</h1>
+            <% if (transactions && transactions.length > 0) { %>
+                <div class="transaction-history-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Date Executed</th>
+                                <th>Type</th>
+                                <th>Details</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% transactions.forEach(function(transaction) { %>
+                                <tr>
+                                    <td><%= transaction.id %></td>
+                                    <td><%= transaction.dateExecuted %></td>
+                                    <td><%= transaction.type %></td>
+                                    <td>
+                                        <div class="transaction-details">
+                                            <% if (transaction.type === 'Buy') { %>
+                                                <div class="transaction-detail">Shares: <%= transaction.details.shares %></div>
+                                                <div class="transaction-detail">Price: $<%= (transaction.details?.buy_price ?? 0).toFixed(2) %></div>
+                                            <% } else if (transaction.type == 'Sell') { %> 
+                                                <div class="transaction-detail">Shares: <%= transaction.details.shares %></div>
+                                                <div class="transaction-detail">Price: $<%= (transaction.details?.sell_price ?? 0).toFixed(2) %></div>
+                                            <% } else { %>
+                                                <div class="transaction-detail">Amount: $<%= (transaction.details?.amount ?? 0).toFixed(2) %></div>
+                                            <% } %>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <% }); %>
+                        </tbody>
+                    </table>
+                </div>
+            <% } else { %>
+                <p class="info-placeholder">No transaction found</p>
+            <% } %>
+        </div>
+    <% } else if (menu === 'transfer') { %>
+    <div class="container">
+        <h1>Transfer</h1>
+        <p><strong>Account Value:</strong> $<%= Number(balance).toFixed(2) %></p>
+        <p><strong>Positions:</strong> $<%= Number(position).toFixed(2) %></p>
+        <p><strong>Cash:</strong> $<%= (balance - position).toFixed(2) %></p>
+
+        <% if (typeof error !== 'undefined' && error) { %>
+            <div style="color: red; margin-bottom: 20px;"><%= error %></div>
+        <% } %>
+        <div class="sub-box">
+            <form action="/transfer" method="post">
+                <input type="hidden" name="menu" value="transfer">
+                <input type="hidden" name="username" value="<%= username %>">
+                <input type="hidden" name="acc_id" value="<%= acc_id %>">
+                <input type="hidden" name="balance" value="<%= balance %>">
+                <input type="hidden" name="position" value="<%= position %>">
+                <input type="hidden" name="stockData" value='<%= JSON.stringify(stockData) %>'>
+
+                <div class="form-group">
+                    <label for="fromAccount">From:</label>
+                    <select id="fromAccount" name="fromAccount">
+                        <option value="Bank">Bank</option>
+                        <option value="<%= username %> - <%= acc_id %>"><%= username %> - <%= acc_id %></option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="toAccount">To:</label>
+                    <select id="toAccount" name="toAccount">
+                        <option value="Bank">Bank</option>
+                        <option value="<%= username %> - <%= acc_id %>"><%= username %> - <%= acc_id %></option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="transferAmount">Transfer Amount:</label>
+                    <input type="text" id="transferAmount" name="transferAmount" required>
+                </div>
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+    </div>
+    <% } else if (menu === 'trade') { %>
+    <div class="container">
+        <form id="positionUpdateForm" action="/trade-pos" method="POST" style="display:none;">
+            <input type="hidden" name="username" id="posUsername">
+            <input type="hidden" name="acc_id" id="posAccId">
+            <input type="hidden" name="balance" id="posBalance">
+            <input type="hidden" name="position" id="posPosition">
+            <input type="hidden" name="stockData" id="posStockData">
+        </form>
+        <h1>Trade</h1>
+        <p>Cash Available for trading:  $<%= (balance - position).toFixed(2) %></p>
+        <div id="errorMessage" style="display: none; color: red;"></div>
+
+        <div class="trade-container" style="display: flex;">
+            <div class="trade-form" style="flex: 1; margin-right: 20px;">
+                <form id = "tradeForm">
+                    <input type="hidden" name="username" value="<%= username %>">
+                    <input type="hidden" name="acc_id" value="<%= acc_id %>">
+                    <input type="hidden" name="balance" value="<%= balance %>">
+                    <input type="hidden" name="position" value="<%= position %>">
+                    <input type="hidden" name="stockData" value='<%= JSON.stringify(stockData) %>'>
+                    <div class="form-group">
+                        <label for="symbolInput">Symbol:</label>
+                        <input type="text" id="symbolInput" name="symbol">
+                    </div>
+                    <div id="additionalFields" style="display: none;">
+                        <div class="form-group">
+                            <label for="accountSelect">Account:</label>
+                            <select id="accountSelect" name="account">
+                                <option value="<%= username %> - <%= acc_id %>"><%= username %> - <%= acc_id %></option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="actionSelect">Action:</label>
+                            <select id="actionSelect" name="action">
+                                <option value="buy">Buy</option>
+                                <option value="sell">Sell</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="quantityInput">Quantity:</label>
+                            <input type="number" id="quantityInput" name="quantity" min="0" value="0">
+                        </div>
+                        <button type="submit">Submit</button>
+                    </div>
+                </form>
+            </div>
+            <div class="trade-info" id="tradeInfo" style="flex: 1;">
+                <!-- Information will be dynamically filled here -->
+            </div>
+        </div>
+    </div>
+    <% } else { %>
+    <div class="container">
+        <h1>Research</h1>
+        <div class="research-container">
+            <div class="stock-movie-group">
+                <div class="column stocks-movies-column" id="stocks-column">
+                    <h2>Stocks</h2>
+                    <% stocks.forEach(function(stock) { %>
+                        <form action="/get-stock-info" method="get" class="stock-form">
+                            <input type="hidden" name="symbol" value="<%= stock.symbol %>">
+                            <input type="hidden" name="username" value="<%= username %>">
+                            <input type="hidden" name="acc_id" value="<%= acc_id %>">
+                            <input type="hidden" name="balance" value="<%= balance %>">
+                            <input type="hidden" name="position" value="<%= position %>">
+                            <input type="hidden" name="stockData" value='<%= JSON.stringify(stockData) %>'>
+                            <input type="hidden" name="movies" value='<%= JSON.stringify(movies) %>'>
+                            <input type="hidden" name="stocks" value='<%= JSON.stringify(stocks) %>'>
+                            <input type="hidden" name="movieInfo" value='<%= JSON.stringify(movieInfo) %>'>
+                            
+                            <button type="submit" class="stock-item"><%= stock.symbol %></button>
+                        </form>
+                    <% }); %>
+                </div>
+                <div class="column info-column" id="stock-info-column">
+                    <h2>Stock Info</h2>
+                    <% if (stockInfo !== false && stockInfo != 'false') { %>
+                    <div class="movie-info-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Actor Name</th>
+                                    <th>Date of Birth</th>
+                                    <th>Current Price</th>
+                                    <th>Closing Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% stockInfo.forEach(function(stock) { %>
+                                    <tr>
+                                        <td><%= stock.actor_name %></td> 
+                                        <td><%= new Date(stock.date_of_birth).toISOString().split('T')[0] %></td>
+                                        <td><%= Number(stock.current_price).toFixed(2) %></td>
+                                        <td><%= Number(stock.closing_price).toFixed(2) %></td>
+                                    </tr>
+                                <% }); %>
+                            </tbody>
+                        </table>
+                    </div>
+                    <% } else { %>
+                        <p class="info-placeholder">No stock selected</p>
+                    <% } %>
+
+                </div>
+            </div>
+            <div class="stock-movie-group">
+                <div class="column stocks-movies-column" id="movies-column">
+                    <h2>Movies</h2>
+                    <% movies.forEach(function(movie) { %>
+                        <form action="/get-movie-info" method="get" class="movie-form">
+                            <input type="hidden" name="title" value="<%= movie.title %>">
+                            <input type="hidden" name="acc_id" value="<%= acc_id %>">
+                            <input type="hidden" name="username" value="<%= username %>">
+                            <input type="hidden" name="balance" value="<%= balance %>">
+                            <input type="hidden" name="position" value="<%= position %>">
+                            <input type="hidden" name="stockData" value='<%= JSON.stringify(stockData) %>'>
+                            <input type="hidden" name="movies" value='<%= JSON.stringify(movies) %>'>
+                            <input type="hidden" name="stocks" value='<%= JSON.stringify(stocks) %>'>
+                            <input type="hidden" name="stockInfo" value='<%= JSON.stringify(stockInfo) %>'>
+                            <button type="submit" class="movie-item"><%= movie.title %> (<%= movie.movie_year %>)</button>
+                        </form>
+                    <% }); %>
+                </div>
+                <div class="column info-column" id="movie-info-column">
+                    <h2>Movie Info</h2>
+                    <% if (movieInfo !== false && movieInfo != 'false') { %>
+                    <div class="movie-info-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Rating</th>
+                                    <th>Review</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% movieInfo.forEach(function(review) { %>
+                                    <tr>
+                                        <td><%= review.rating %></td> <!-- Assume 'reviewer_name' is a column in your 'review' table -->
+                                        <td><%= review.written_review %></td> <!-- Assume 'rating' is a column in your 'review' table -->
+                                    </tr>
+                                <% }); %>
+                            </tbody>
+                        </table>
+                    </div>
+                    <% } else { %>
+                        <p class="info-placeholder">No movie selected</p>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+    <% } %>
+    <script>
+        const username = '<%= username %>';
+        const acc_id = '<%= acc_id %>';
+        let cash =  '$<%= (balance - position).toFixed(2) %>';
+        let balance = '<%= balance %>';
+        let currentPrice = null; // To store the current price of the stock
+    
+        document.getElementById('symbolInput').addEventListener('keypress', async (event) => {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            const symbol = event.target.value.trim();
+            if (symbol) {
+                console.log("fetching trade");
+                try {
+                    const response = await fetch('/trade', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ symbol, acc_id, username })
+                    });
+                    const data = await response.json();
+                    console.log(data);
+                    if (data.error) {
+                        document.getElementById('errorMessage').textContent = data.error;
+                        document.getElementById('errorMessage').style.display = 'block';
+                    } else {
+
+                        document.getElementById('additionalFields').style.display = 'block';
+                        console.log(data);
+                        currentPrice = data.current_price;
+
+                        const dailyChange = data.current_price - data.closing_price;
+                        const dailyChangePercent = (dailyChange / data.closing_price) * 100;
+                        
+                        const dailyChangeClass = dailyChange > 0 ? 'green' : dailyChange < 0 ? 'grey' : 'red';
+                        const dailyChangePercentClass = dailyChangePercent > 0 ? 'green' : dailyChangePercent < 0 ? 'grey' : 'red';
+
+                        document.getElementById('tradeInfo').innerHTML = `
+                            <p><span style="text-decoration: underline;">${data.symbol}</span></p>
+                            <p>$${data.current_price} <span class="${dailyChangeClass}">$${dailyChange.toFixed(2)}</span> (<span class="${dailyChangePercentClass}">${dailyChangePercent.toFixed(2)}%</span>)</p>
+                            <p>Shares Owned: ${data.num_share}</p>
+                            <p id="estimatedTotal">Estimated Total: $0</p>
+                        `;
+                    }
+                } catch (error) {
+                    console.error('Fetch error:', error);
+                }
+            }
+        }
+    });
+
+    document.getElementById('tradeForm').addEventListener('submit', async function(event) {
+        event.preventDefault(); // Prevent the form from submitting the traditional way
+
+        balance = '<%= balance %>';
+        let position = '<%= position %>';
+        stockData ='<%= JSON.stringify(stockData) %>';
+        let symbol = document.getElementById('symbolInput').value;
+        let action = document.getElementById('actionSelect').value;
+        let quantity = document.getElementById('quantityInput').value;
+
+        console.log(symbol,quantity, position);
+
+        try {
+            const response = await fetch('/trade-update', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    username, acc_id, balance, position, stockData, symbol, action, quantity
+                })
+            })
+            const data = await response.json();
+            if (data.error) {
+                document.getElementById('errorMessage').textContent = data.error;
+                document.getElementById('errorMessage').style.display = 'block';
+            } else {
+                document.getElementById('errorMessage').style.display = 'none';
+                quantityInput.value = quantity;
+                console.log(quantityInput.value);
+                document.getElementById('posUsername').value = username;
+                document.getElementById('posAccId').value = acc_id;
+                document.getElementById('posBalance').value = balance;
+                document.getElementById('posPosition').value = data.position; // Updated position from /trade-update response
+                document.getElementById('posStockData').value = JSON.stringify(data.stockData);
+                document.getElementById('positionUpdateForm').submit();
+            }
+        } catch(error) {}
+
+    });
+    
+        // Event listener for the quantity input to update the estimated total in real-time
+        document.getElementById('quantityInput').addEventListener('input', (event) => {
+            const quantity = event.target.value;
+            const estimatedTotal = currentPrice * quantity;
+            const action = document.getElementById('actionSelect').value;
+            if (action === 'buy') {
+                document.getElementById('estimatedTotal').textContent = `Estimated Total: -$${estimatedTotal.toFixed(2)}`;
+            } else { // For 'sell' action
+                document.getElementById('estimatedTotal').textContent = `Estimated Total: $${estimatedTotal.toFixed(2)}`;
+            }
+        });
+    </script>
+
+</body>
+</html>

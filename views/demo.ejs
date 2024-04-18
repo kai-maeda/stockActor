@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actor Trading</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #E1F0F2; /* Light teal background */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            text-align: center;
+            background-color: #FFFFFF;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .google-back-button {
+            border: solid #5CA4A9;
+            border-width: 0 3px 3px 0;
+            display: inline-block;
+            padding: 3px;
+            background: #FFFFFF;
+            transform: rotate(135deg);
+            -webkit-transform: rotate(135deg);
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            cursor: pointer;
+        }
+
+        h1 {
+            color: #1B4F5C;
+            margin-bottom: 20px;
+        }
+
+        .button {
+            display: inline-block;
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #FFFFFF;
+            background-color: #5CA4A9;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .button:hover {
+            background-color: #F4B860;
+        }
+
+        .input-field {
+            display: block;
+            width: 100%;
+            padding: 10px 10px 10px 35px; /* Adjusted padding for search icon */
+            font-size: 16px;
+            color: #333;
+            background-color: #ffffff;
+            background-image: url('/images/search-icon.png'); /* Placeholder for your search icon image */
+            background-position: 10px 10px; /* Position the background image */
+            background-repeat: no-repeat; /* Make sure the image does not repeat */
+            background-size: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        .input-wrapper {
+            position: relative; /* Relative positioning for the wrapper */
+            margin-bottom: 20px;
+            width: 100%; /* Use 100% width for the wrapper to take full width */
+        }
+        .clear-button {
+            position: absolute;
+            right: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+            border: none;
+            background: transparent;
+            font-size: 16px;
+            cursor: pointer;
+            display: none; /* Hide by default */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to the Demo Interface</h1>
+        <div id="dateSection" style="display: flex; align-items: center; justify-content: center;">
+            <h1>The current date is: <span id="dateDisplay"><%= `${curr_date.getMonth() + 1}/${curr_date.getDate()}/${curr_date.getFullYear()}` %></span></h1>
+            <input type="date" id="editDateInput" style="display:none; margin-left: 10px;"
+       value="<%= curr_date.toISOString().split('T')[0] %>">
+        </div>
+        <% if (is_open) { %> 
+            <h1>The Market is Open</h1>
+        <% } else { %>
+            <h1>The Market is Closed</h1>
+        <% } %>
+        <form action="/open-market" method="post">
+            <button type="submit" class="button">Open Market</button>
+        </form>
+        <form action="/close-market" method="post">
+            <button type="submit" class="button">Close Market</button>
+        </form>
+        <form action="/next-day" method="post">
+            <button type="submit" class="button">Go to Next Day</button>
+        </form>
+        <button type="button" id="changeDateButton" class="button">Change Date</button>
+        <form action="/" method="get" id="backForm"></form>
+        <button type="submit" form="backForm" class="google-back-button"></button>
+        <h1>Change Stock Price</h1>
+        <form id="symbolForm">
+            <div class="input-wrapper">
+                <input type="text" id="stockSymbol" name="symbol" class="input-field" placeholder="Search for a Symbol">
+                <button type="button" class="clear-button" onclick="clearInput()">&times;</button>
+                <button type="submit" class="button" style="display: none;">Submit</button>
+            </div>
+            <p id="error-msg" style="color: red; display: none;">Symbol not found. Please try again.</p>
+            <input type="hidden" id = "curr_date" name="curr_date" value="<%= curr_date %>">
+            <input type="hidden" id = "is_open" name ="is_open" value="<%= is_open %>">
+        </form>
+        <% if (typeof actor_name !== 'undefined' && actor_name) { %>
+            <p><strong>Actor Name:</strong> <%= actor_name %></p>
+            <p><strong>Closing Price:</strong> <%= closing_price %></p>
+            <p><strong>Date of Birth:</strong> 
+                <% 
+                var dob = new Date(date_of_birth);
+                var formattedDOB = ((dob.getMonth() + 1) + '').padStart(2, '0') + '/' + 
+                                   (dob.getDate() + '').padStart(2, '0') + '/' + 
+                                   dob.getFullYear();
+                %>
+                <%= formattedDOB %>
+            </p>
+            <p><strong>Current Price:</strong> <%= current_price %></p>
+            <p><strong>Symbol:</strong> <%= symbol %></p>  
+            <form action="/change-price" method="post">
+                <input type="text" id="setPrice" name="setPrice" value="<%= current_price %>" required>
+                <input type="hidden" name="symbol" value="<%= symbol %>">
+                <input type="hidden" name="actor_name" value="<%= actor_name %>">
+                <input type="hidden" name="closing_price" value="<%= closing_price %>">
+                <input type="hidden" name="date_of_birth" value="<%= date_of_birth %>">
+                <input type="hidden" name="current_price" value="<%= current_price %>">
+                <input type="hidden" name="curr_date" value="<%= curr_date %>">
+                <input type="hidden" name="is_open" value="<%= is_open %>">
+                <button type="submit">Set Price</button>
+            </form>
+        <% } %>
+    </div>
+    <script>
+        const stockSymbolInput = document.getElementById('stockSymbol');
+        const clearButton = document.querySelector('.clear-button');
+        const errorMsg = document.getElementById('error-msg');
+        symbolForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const symbol = document.getElementById('stockSymbol').value;
+            const is_open = document.getElementById('is_open').value;
+            const curr_date = document.getElementById('curr_date').value;
+            try {
+                const response = await fetch('/validate-symbol', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ symbol })
+                });
+                if (response.ok) {
+                    window.location.href = `/entered-stock?symbol=${symbol}&is_open=${is_open}&curr_date=${curr_date}`;
+                } else {
+                    errorMsg.style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        });
+        stockSymbolInput.addEventListener('input', () => {
+            clearButton.style.display = stockSymbolInput.value ? 'block' : 'none';
+        });
+        function clearInput() {
+            console.log("called clear");
+            stockSymbolInput.value = '';
+            clearButton.style.display = 'none';
+            stockSymbolInput.focus();
+        }
+        document.getElementById('changeDateButton').addEventListener('click', function() {
+            document.getElementById('dateDisplay').style.display = 'none';
+            document.getElementById('editDateInput').style.display = 'inline-block';
+            document.getElementById('editDateInput').focus();
+        });
+        document.getElementById('editDateInput').addEventListener('keypress', async function(event) {
+            if (event.key === 'Enter') {
+                const newDate = this.value;
+                try {
+                    const response = await fetch('/change-date', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ newDate }),
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    window.location.reload()
+
+                } catch (error) {
+                    console.error('There has been a problem with your fetch operation:', error);
+                } 
+            }
+        });
+
+    </script>
+</body>
+</html>

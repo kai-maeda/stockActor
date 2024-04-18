@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Actor Trading</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #E1F0F2; /* Light teal background */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .login-container {
+            position: relative;
+            text-align: center;
+            background-color: #FFFFFF; /* White background */
+            padding: 40px 60px; /* Adjusted padding for better layout */
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #1B4F5C; /* Dark teal color for text */
+            margin-bottom: 30px;
+        }
+
+        .button-container {
+            display: flex;
+            gap: 20px; /* Space between buttons */
+        }
+
+        .button {
+            flex-grow: 1;
+            padding: 10px 20px; /* Adjusted padding for buttons */
+            font-size: 16px;
+            color: #FFFFFF; /* White text */
+            background-color: #5CA4A9; /* Teal button background */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .button:hover {
+            background-color: #F4B860; /* Orange color on hover */
+        }
+
+        .google-back-button {
+            border: solid #5CA4A9; /* Teal border color */
+            border-width: 0 3px 3px 0;
+            display: inline-block;
+            padding: 3px;
+            background: #FFFFFF; /* White background */
+            transform: rotate(135deg);
+            -webkit-transform: rotate(135deg);
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h1>Choose an Option</h1>
+        <div class="button-container">
+            <form action="/<%= interfaceType %>-interface/login" method="post" style="width: 100%;">
+                <button type="submit" class="button">Login</button>
+            </form>
+            <form action="/<%= interfaceType %>-interface/create-account" method="post" style="width: 100%;">
+                <button type="submit" class="button">Create Account</button>
+            </form>
+        </div>
+        <form action="/" method="get" id="backForm"></form>
+        <button type="submit" form="backForm" class="google-back-button"></button>
+    </div>
+</body>
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account - Actor Trading</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #E1F0F2; /* Light teal background */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .login-container {
+            position: relative;
+            background-color: #FFFFFF; /* White background */
+            padding: 40px;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 350px; /* Adjusted for more input fields */
+        }
+
+        .login-container h2 {
+            margin: 0 0 20px 0;
+            font-weight: 300;
+            color: #1B4F5C; /* Dark teal text */
+        }
+
+        .login-container form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .login-container form input {
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #B8E1DD; /* Light teal border */
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .login-container form .button {
+            padding: 10px;
+            background-color: #5CA4A9; /* Teal background */
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        .login-container form .button:hover {
+            background-color: #F4B860; /* Orange hover */
+        }
+
+        .google-back-button {
+            border: solid #5CA4A9; /* Teal border */
+            border-width: 0 3px 3px 0;
+            display: inline-block;
+            padding: 3px;
+            background: #FFFFFF; /* White background */
+            transform: rotate(135deg);
+            -webkit-transform: rotate(135deg);
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h2>Create Your Account</h2>
+        <form action="/<%= interfaceType %>-interface" method="get" id="backForm"></form>
+        <button type="submit" form="backForm" class="google-back-button"></button>
+        <form action="/<%= interfaceType %>-interface/register" method="post">
+            <input type="text" name="state_id" placeholder="State ID" required>
+            <input type="text" name="tax_id" placeholder="Tax ID" required>
+            <input type="text" name="cname" placeholder="Full Name" required>
+            <input type="tel" name="phone" placeholder="Phone Number" required>
+            <input type="email" name="email" placeholder="Email" required>
+            <input type="text" name="username" placeholder="Username" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <button type="submit" class="button">Register</button>
+        </form>
+    </div>
+</body>
+</html>
