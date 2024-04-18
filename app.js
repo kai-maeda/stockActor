@@ -74,7 +74,7 @@ app.post('/trade', async (req, res) => {
     let num_share = 0
     try {
         // console.log("in /trade");
-        const accountDetails = (await db.query('SELECT * FROM stock_account WHERE symbol = ? AND username = ? AND acc_id = ?', [symbol, username, acc_id]))[0];
+        const accountDetails = (await db.query('SELECT * FROM Stock_Account WHERE symbol = ? AND username = ? AND acc_id = ?', [symbol, username, acc_id]))[0];
         const stockDetails = (await db.query('SELECT * FROM Stock_Actor WHERE symbol = ?', [symbol]))[0];
         console.log(stockDetails[0]);
         if(typeof stockDetails[0] == 'undefined') {
@@ -90,7 +90,10 @@ app.post('/trade', async (req, res) => {
             closing_price: stockDetails[0].closing_price,
             num_share: num_share
         });
-    } catch (error) {}
+    } catch (error) {
+        console.error('Error fetching trade:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
 });
 app.all('/trade-update', async (req,res) => {
     let { username, acc_id, balance, position, symbol, action, quantity } = req.body;
@@ -99,7 +102,7 @@ app.all('/trade-update', async (req,res) => {
     let stockDetails;
     let [rows4] = [];
     try {
-        accountDetails = (await db.query('SELECT * FROM stock_account WHERE symbol = ? AND username = ? AND acc_id = ?', [symbol, username, acc_id]))[0][0];
+        accountDetails = (await db.query('SELECT * FROM Stock_Account WHERE symbol = ? AND username = ? AND acc_id = ?', [symbol, username, acc_id]))[0][0];
         stockDetails = (await db.query('SELECT * FROM Stock_Actor WHERE symbol = ?', [symbol]))[0][0];
         const totalValue = stockDetails.current_price * quantity;
         
@@ -111,8 +114,8 @@ app.all('/trade-update', async (req,res) => {
             // console.log(accountDetails);
             if (typeof accountDetails == 'undefined') {
                 await db.query('INSERT INTO Stock_Account VALUES (?,?,?,?,?);', [acc_id, symbol ,quantity, totalValue, username]);
-                accountDetails = (await db.query('SELECT * FROM stock_account WHERE symbol = ? AND username = ? AND acc_id = ?', [symbol, username, acc_id]))[0][0];
-                [rows4] = await db.query('SELECT * FROM Stock_Account WHERE username = ? AND acc_id = ?', [username,acc_id]); //stock_account might be empty
+                accountDetails = (await db.query('SELECT * FROM Stock_Account WHERE symbol = ? AND username = ? AND acc_id = ?', [symbol, username, acc_id]))[0][0];
+                [rows4] = await db.query('SELECT * FROM Stock_Account WHERE username = ? AND acc_id = ?', [username,acc_id]); //Stock_Account might be empty
                 console.log(rows4);
                 for (let i = 0; i < rows4.length; i++) {
                     const stock = rows4[i];
@@ -124,8 +127,8 @@ app.all('/trade-update', async (req,res) => {
             } else{
                 console.log(accountDetails.balance_share, totalValue, accountDetails.num_share, quantity);
                 const new_balance = (parseFloat(accountDetails.balance_share) + parseFloat(totalValue));
-                await db.query('UPDATE stock_account SET num_share = num_share + ?, balance_share = ? WHERE acc_id = ? AND symbol = ? AND username = ?', [quantity, new_balance, acc_id, symbol,username]);
-                [rows4] = await db.query('SELECT * FROM Stock_Account WHERE username = ? AND acc_id = ?', [username,acc_id]); //stock_account might be empty
+                await db.query('UPDATE Stock_Account SET num_share = num_share + ?, balance_share = ? WHERE acc_id = ? AND symbol = ? AND username = ?', [quantity, new_balance, acc_id, symbol,username]);
+                [rows4] = await db.query('SELECT * FROM Stock_Account WHERE username = ? AND acc_id = ?', [username,acc_id]); //Stock_Account might be empty
                 console.log(rows4);
                 for (let i = 0; i < rows4.length; i++) {
                     const stock = rows4[i];
@@ -146,8 +149,8 @@ app.all('/trade-update', async (req,res) => {
                 return res.json({ error: 'You cannot sell more stock than you own.' });
             }
             const new_balance = (parseFloat(accountDetails.balance_share) - parseFloat(accountDetails.balance_share) / parseInt(accountDetails.num_share) * parseInt(quantity));
-            await db.query('UPDATE stock_account SET num_share = num_share - ?, balance_share = ? WHERE acc_id = ? AND symbol = ? AND username = ?', [quantity, new_balance, acc_id, symbol,username]);
-            [rows4] = await db.query('SELECT * FROM Stock_Account WHERE username = ? AND acc_id = ?', [username,acc_id]); //stock_account might be empty
+            await db.query('UPDATE Stock_Account SET num_share = num_share - ?, balance_share = ? WHERE acc_id = ? AND symbol = ? AND username = ?', [quantity, new_balance, acc_id, symbol,username]);
+            [rows4] = await db.query('SELECT * FROM Stock_Account WHERE username = ? AND acc_id = ?', [username,acc_id]); //Stock_Account might be empty
             console.log(rows4);
             for (let i = 0; i < rows4.length; i++) {
                 const stock = rows4[i];
