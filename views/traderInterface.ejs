@@ -215,7 +215,7 @@
                         <tr>
                             <td><%= stock.symbol %></td>
                             <td><%= stock.current_price %></td>
-                            <td class="<%= dayGainDollarClass %>"><%= stock.current_price - stock.closing_price %></td>
+                            <td class="<%= dayGainDollarClass %>"><%= ((stock.current_price - stock.closing_price) * stock.num_share).toFixed(2) %></td>
                             <td class="<%= dayGainPercentClass %>"><%= ((stock.current_price - stock.closing_price) / stock.closing_price * 100).toFixed(2) %>%</td>
                             <td>$<%= stock.num_share * stock.current_price.toFixed(2) %></td>
                             <td>$<%= stock.balance_share.toFixed(2) %></td>
@@ -495,6 +495,7 @@
                     } else {
 
                         document.getElementById('additionalFields').style.display = 'block';
+                        document.getElementById('errorMessage').style.display = 'none';
                         console.log(data);
                         currentPrice = data.current_price;
 
