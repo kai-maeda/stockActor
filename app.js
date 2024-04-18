@@ -11,7 +11,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Serve your index.html file
-app.get('/', (req, res) => {
+app.get('/', (_req, res) => {
     res.sendFile(__dirname + '/index.html');
 });
 
@@ -22,6 +22,12 @@ const db = mysql.createConnection({
     password: process.env.MYSQL_ADDON_PASSWORD, // Environment variable for the DB password
     database: process.env.MYSQL_ADDON_DB     // Environment variable for the DB name
 }).promise();
+// const db = mysql.createConnection({
+//     host: 'localhost',       // Environment variable for the DB host
+//     user: 'root',       // Environment variable for the DB user
+//     password: 'UCSB@Sp191919khm', // Environment variable for the DB password
+//     database: 'trade'     // Environment variable for the DB name
+// }).promise();
 
 const indexRouter = require('./routes/index')(db);
 const loginRouter = require('./routes/login')(db);
@@ -87,7 +93,7 @@ app.post('/trade', async (req, res) => {
     } catch (error) {}
 });
 app.all('/trade-update', async (req,res) => {
-    let { username, acc_id, balance, position, stockData, symbol, action, quantity } = req.body;
+    let { username, acc_id, balance, position, symbol, action, quantity } = req.body;
     const cash = balance - position;
     let accountDetails;
     let stockDetails;
@@ -200,6 +206,8 @@ async function getDateSQLFriendly() {
 }
 
 const port = process.env.PORT || 3000;
+// console.log(`CHECKING PORT NUMBER ${port}`)
+
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });

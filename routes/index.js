@@ -3,11 +3,11 @@ module.exports = function(db) {
     const router = express.Router();
 
 
-    router.all('/customer-interface', (req, res) => {
-        res.render('interface', { interfaceType: 'customer' });
+    router.all('/Customer-interface', (req, res) => {
+        res.render('interface', { interfaceType: 'Customer' });
     });
-    router.all('/mangager-interface', (req, res) => {
-        res.render('interface', { interfaceType: 'manager' });
+    router.all('/Mangager-interface', (req, res) => {
+        res.render('interface', { interfaceType: 'Manager' });
     });
     router.all('/demo', async (req, res) => {
         let curr_date;
