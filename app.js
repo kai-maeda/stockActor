@@ -22,12 +22,7 @@ const db = mysql.createConnection({
     password: process.env.MYSQL_ADDON_PASSWORD, // Environment variable for the DB password
     database: process.env.MYSQL_ADDON_DB     // Environment variable for the DB name
 }).promise();
-// const db = mysql.createConnection({
-//     host: 'localhost',       // Environment variable for the DB host
-//     user: 'root',       // Environment variable for the DB user
-//     password: 'UCSB@Sp191919khm', // Environment variable for the DB password
-//     database: 'trade'     // Environment variable for the DB name
-// }).promise();
+
 
 const indexRouter = require('./routes/index')(db);
 const loginRouter = require('./routes/login')(db);
